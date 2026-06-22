@@ -1,12 +1,10 @@
-"""acts as my executable file. It catches unexpected runtime bugs (such as typing text for numeric inputs) and routes flow cleanly."""
 from models import Asset, PortfolioItem, TransactionRecord
 
 class TradingEngine:
     def __init__(self):
         self.balance = 100000.0
-        self.history = []   #List of TransactionRecord objects
+        self.history = []     # List of TransactionRecord objects
         self.portfolio = {}   # Key: asset_name, Value: PortfolioItem object
-        
         
         # Initialize default mock market data
         self.market = {
@@ -27,8 +25,7 @@ class TradingEngine:
     def buy_asset(self, asset_name, qty):
         asset_name = asset_name.upper()
         
-        
-          # 1. Validation Checks
+        # 1. Validation Checks
         if asset_name not in self.market:
             print("❌ Transaction Rejected: Asset does not exist in this market.")
             return
@@ -37,7 +34,7 @@ class TradingEngine:
         if qty <= 0:
             print("❌ Transaction Rejected: Quantity must be greater than zero.")
             return
-        if qty >asset.available_qty:
+        if qty > asset.available_qty:
             print(f"❌ Transaction Rejected: Market only has {asset.available_qty} units available.")
             return
         
@@ -50,7 +47,6 @@ class TradingEngine:
         self.balance -= total_cost
         asset.available_qty -= qty
         
-        
         # Update Portfolio
         if asset_name in self.portfolio:
             self.portfolio[asset_name].quantity += qty
@@ -58,8 +54,6 @@ class TradingEngine:
         else:
             self.portfolio[asset_name] = PortfolioItem(asset_name, qty, asset.price)
             
-            
-        # Log History
         # Log History
         self.history.append(TransactionRecord("BUY", asset_name, qty, asset.price))
         print(f"✅ Successfully bought {qty} units of {asset_name} for ${total_cost:.2f}")
@@ -133,5 +127,3 @@ class TradingEngine:
             return
         for record in self.history:
             print(record)
-            
-            
